@@ -11,8 +11,19 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.7</java.version>
-        <scala.version>2.10.4</scala.version>
+        <scala.version>2.10.6</scala.version>
+        <hadoop.version>2.6.0-cdh5.7.2</hadoop.version>
+        <spark.version>1.6.0-cdh5.7.2</spark.version>
+        <solr.version>4.10.3-cdh5.7.2</solr.version>
     </properties>
+
+    <repositories>
+        <repository>
+            <id>cloudera</id>
+            <url>https://repository.cloudera.com/artifactory/cloudera-repos/</url>
+        </repository>
+    </repositories>
+
     <build>
         <plugins>
             <plugin>
@@ -174,20 +185,20 @@
         <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-sql_2.10</artifactId>
-            <version>1.2.0</version>
+            <version>${spark.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-streaming_2.10</artifactId>
-            <version>1.2.0</version>
+            <version>${spark.version}</version>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-streaming-twitter_2.10</artifactId>
-            <version>1.2.0</version>
+            <version>${spark.version}</version>
         </dependency>
 
         <dependency>
@@ -199,7 +210,7 @@
         <dependency>
             <groupId>org.apache.solr</groupId>
             <artifactId>solr-solrj</artifactId>
-            <version>4.10.3</version>
+            <version>${solr.version}</version>
             <type>jar</type>
         </dependency>
 
@@ -218,7 +229,7 @@
         <dependency>
             <groupId>org.apache.hadoop</groupId>
             <artifactId>hadoop-client</artifactId>
-            <version>2.4.1</version>
+            <version>${hadoop.version}</version>
             <scope>compile</scope>
         </dependency>
 
