@@ -2,6 +2,9 @@ package org.bigsolr.spark
 
 import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.io.NullWritable
+import org.apache.solr.common.SolrDocument
+import org.apache.spark.SparkContext
+import org.apache.spark.rdd.RDD
 import org.apache.spark.sql._
 import org.apache.spark.sql.sources.{BaseRelation, Filter, PrunedFilteredScan}
 import org.apache.spark.sql.types.{StringType, StructField, StructType}
@@ -30,7 +33,6 @@ case class SolrRelation(
     conf.set("solr.server.url", serverUrl)
     conf.set("solr.server.mode", serverMode)
     conf.set("solr.server.collection", collection)
-    conf.set("solr.server.fields", fields)
 
     val rdds = sqlContext.sparkContext.newAPIHadoopRDD(
       conf,
@@ -53,3 +55,29 @@ case class SolrRelation(
   }
 
 }
+
+
+
+
+object SolrRDD {
+
+  def rdd(conf: Configuration, sc: SparkContext)(collection: String, query: String): RDD[SolrDocument] = {
+
+    // Build the job configuration
+    conf.set("solr.server.collection", collection)
+    conf.set("solr.query", query)
+
+    val rdds = sc.newAPIHadoopRDD(
+      conf,
+      classOf[SolrInputFormat],
+      classOf[NullWritable],
+      classOf[SolrRecord]
+    )
+
+    rdds map { case (key, value) => value.getSolrDocument }
+  }
+
+}
+
+
+

@@ -20,7 +20,6 @@ package object solr {
         fields = fieldsStr
       )(sqlContext)
       sqlContext.baseRelationToDataFrame(solrRelation)
-
     }
 
     def writeToIndex(filePath: String) = {

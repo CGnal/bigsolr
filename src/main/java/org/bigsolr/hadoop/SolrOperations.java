@@ -31,7 +31,6 @@ public class SolrOperations {
     public static final String SERVER_URL = "solr.server.url";
     private static final String SERVER_MODE = "solr.server.mode";
     private static final String COLLECTION_NAME = "solr.server.collection";
-    private static final String FIELDS = "solr.server.fields";
 
     private static Map<String, SolrServer> solrServers = new HashMap<String, SolrServer>();
     private static final Map<String, CloudSolrServer> cachedServers = new HashMap<String, CloudSolrServer>();
@@ -39,7 +38,8 @@ public class SolrOperations {
     public static SolrServer getSolrServer(Configuration conf) {
         SolrServer solr = null;
         if (conf.get(SERVER_MODE).toLowerCase().equals("standalone")) {
-            solr = getSolrHttpServer(conf.get(SERVER_URL));
+            String ENDPOINT = "http://" + conf.get(SERVER_URL) + "/solr/" + conf.get(COLLECTION_NAME);
+            solr = getSolrHttpServer(ENDPOINT);
         } else if (conf.get(SERVER_MODE).toLowerCase().equals("cloud")) {
             solr = getSolrCloudServer(conf.get(SERVER_URL), conf.get(COLLECTION_NAME));
         } else {
@@ -59,7 +59,7 @@ public class SolrOperations {
         synchronized (cachedServers) {
             cloudSolrServer = cachedServers.get(zkHostUrl);
             if (cloudSolrServer == null) {
-                cloudSolrServer = new CloudSolrServer(zkHostUrl);
+                cloudSolrServer = new CloudSolrServer(zkHostUrl + "/solr");
                 cloudSolrServer.setDefaultCollection(collection);
                 cloudSolrServer.connect();
                 cachedServers.put(zkHostUrl, cloudSolrServer);
