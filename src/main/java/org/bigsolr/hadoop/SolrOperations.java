@@ -39,7 +39,8 @@ public class SolrOperations {
     public static SolrServer getSolrServer(Configuration conf) {
         SolrServer solr = null;
         if (conf.get(SERVER_MODE).toLowerCase().equals("standalone")) {
-            solr = getSolrHttpServer(conf.get(SERVER_URL));
+            String ENDPOINT = "http://" + conf.get(SERVER_URL) + "/solr/" + conf.get(COLLECTION_NAME);
+            solr = getSolrHttpServer(ENDPOINT);
         } else if (conf.get(SERVER_MODE).toLowerCase().equals("cloud")) {
             solr = getSolrCloudServer(conf.get(SERVER_URL), conf.get(COLLECTION_NAME));
         } else {
