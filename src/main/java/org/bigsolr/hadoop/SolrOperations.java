@@ -31,7 +31,6 @@ public class SolrOperations {
     public static final String SERVER_URL = "solr.server.url";
     private static final String SERVER_MODE = "solr.server.mode";
     private static final String COLLECTION_NAME = "solr.server.collection";
-    private static final String FIELDS = "solr.server.fields";
 
     private static Map<String, SolrServer> solrServers = new HashMap<String, SolrServer>();
     private static final Map<String, CloudSolrServer> cachedServers = new HashMap<String, CloudSolrServer>();

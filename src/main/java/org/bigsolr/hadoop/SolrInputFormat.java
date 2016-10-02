@@ -48,8 +48,6 @@ public class SolrInputFormat extends InputFormat<NullWritable, SolrRecord>
   private static final String SERVER_MODE = "solr.server.mode";
   private static final String SERVER_URL = "solr.server.url";
   private static final String COLLECTION_NAME = "solr.server.collection";
-  private static final String FIELDS = "solr.server.fields";
-  private static final String ID_FIELD = "id";
 
   // New API
   @Override
@@ -57,14 +55,11 @@ public class SolrInputFormat extends InputFormat<NullWritable, SolrRecord>
     log.info("SolrInputFormat -> getSplits");
 
     Configuration conf = context.getConfiguration();
-    String collectionName = conf.get(COLLECTION_NAME);
     int numSplits = context.getNumReduceTasks();
     SolrServer solr = SolrOperations.getSolrServer(conf);
 
     final SolrQuery solrQuery = new SolrQuery(conf.get(SOLR_QUERY));
-    solrQuery.setFields(ID_FIELD);
     solrQuery.setRows(50);
-    solrQuery.set("collection", collectionName);
     solrQuery.setStart(0);
 
     QueryResponse response;
@@ -96,9 +91,7 @@ public class SolrInputFormat extends InputFormat<NullWritable, SolrRecord>
     SolrServer solr = SolrOperations.getSolrServer(conf);
 
     final SolrQuery solrQuery = new SolrQuery(conf.get(SOLR_QUERY));
-    solrQuery.setFields(ID_FIELD);
     solrQuery.setRows(50);
-    solrQuery.set("collection", collectionName);
     solrQuery.setStart(0);
 
     QueryResponse response;
@@ -133,8 +126,6 @@ public class SolrInputFormat extends InputFormat<NullWritable, SolrRecord>
     Configuration conf = context.getConfiguration();
     org.apache.hadoop.mapred.Reporter reporter = null;  // Need to implement with heartbeat
     
-    String collectionName = conf.get(COLLECTION_NAME);
-    String fields = conf.get(FIELDS);
     SolrServer solr = SolrOperations.getSolrServer(conf);
 
     SolrInputSplit solrSplit = (SolrInputSplit) split;
@@ -142,8 +133,6 @@ public class SolrInputFormat extends InputFormat<NullWritable, SolrRecord>
       
     final SolrQuery solrQuery = new SolrQuery(conf.get(SOLR_QUERY));
 
-    solrQuery.setFields(fields);
-    solrQuery.set("collection", collectionName);
     solrQuery.setStart(solrSplit.getDocBegin());
     solrQuery.setRows(numDocs);
 
@@ -165,8 +154,6 @@ public class SolrInputFormat extends InputFormat<NullWritable, SolrRecord>
 
     log.info("SolrInputFormat -> getRecordReader");
 
-    String collectionName = conf.get(COLLECTION_NAME);
-    String fields = conf.get(FIELDS);
     SolrServer solr = SolrOperations.getSolrServer(conf);
     int numDocs = 0;
 
@@ -178,8 +165,6 @@ public class SolrInputFormat extends InputFormat<NullWritable, SolrRecord>
     }
       
     final SolrQuery solrQuery = new SolrQuery(conf.get(SOLR_QUERY));
-    solrQuery.setFields(fields);
-    solrQuery.set("collection", collectionName); // Added
     solrQuery.setStart(solrSplit.getDocBegin());
     solrQuery.setRows(numDocs);
 
