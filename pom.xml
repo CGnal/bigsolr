@@ -5,7 +5,7 @@
     <groupId>org.bigsolr</groupId>
     <artifactId>bigsolr</artifactId>
     <packaging>jar</packaging>
-    <version>0.1</version>
+    <version>1.0-cdh5.7.2</version>
     <name>BigSolr</name>
     <url>http://maven.apache.org</url>
     <properties>

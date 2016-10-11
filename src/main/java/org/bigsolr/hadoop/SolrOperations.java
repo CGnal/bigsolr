@@ -59,7 +59,7 @@ public class SolrOperations {
         synchronized (cachedServers) {
             cloudSolrServer = cachedServers.get(zkHostUrl);
             if (cloudSolrServer == null) {
-                cloudSolrServer = new CloudSolrServer(zkHostUrl);
+                cloudSolrServer = new CloudSolrServer(zkHostUrl + "/solr");
                 cloudSolrServer.setDefaultCollection(collection);
                 cloudSolrServer.connect();
                 cachedServers.put(zkHostUrl, cloudSolrServer);

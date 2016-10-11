@@ -61,9 +61,10 @@ case class SolrRelation(
 
 object SolrRDD {
 
-  def rdd(conf: Configuration, sc: SparkContext)(query: String): RDD[SolrDocument] = {
+  def rdd(conf: Configuration, sc: SparkContext)(collection: String, query: String): RDD[SolrDocument] = {
 
     // Build the job configuration
+    conf.set("solr.server.collection", collection)
     conf.set("solr.query", query)
 
     val rdds = sc.newAPIHadoopRDD(
