@@ -15,25 +15,20 @@
 
 package org.bigsolr.hadoop;
 
-import java.io.IOException;
-
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.io.Text;
-import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.io.MapWritable;
 import org.apache.hadoop.io.NullWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.io.Writable;
+import org.apache.hadoop.mapred.JobConf;
 import org.apache.hadoop.mapreduce.RecordWriter;
 import org.apache.hadoop.mapreduce.TaskAttemptContext;
-
-import org.apache.solr.common.SolrInputDocument;
-import org.apache.solr.client.solrj.SolrServer;
-import org.apache.solr.client.solrj.SolrServerException;
-
-import org.bigsolr.hadoop.SolrOperations;
-
 import org.apache.log4j.Logger;
+import org.apache.solr.client.solrj.SolrClient;
+import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.common.SolrInputDocument;
 
-import org.apache.hadoop.mapred.JobConf;
+import java.io.IOException;
 
 public class SolrRecordWriter extends RecordWriter<NullWritable, Writable> 
     implements org.apache.hadoop.mapred.RecordWriter<NullWritable, Writable> {
@@ -43,7 +38,7 @@ public class SolrRecordWriter extends RecordWriter<NullWritable, Writable>
   private static final String COLLECTION_NAME = "solr.server.collection";
   private static final String FIELDS = "solr.server.fields";
 
-  private SolrServer solr;
+  private SolrClient solr;
   private Configuration conf;
   private static Logger log = Logger.getLogger(SolrRecordWriter.class);
 
@@ -52,14 +47,14 @@ public class SolrRecordWriter extends RecordWriter<NullWritable, Writable>
 
   	log.info("SolrRecordWriter ->  SolrRecordWriter(TaskAttemptContext context)");
   	conf = context.getConfiguration();
-    solr = SolrOperations.getSolrServer(conf);
+    solr = SolrOperations.getSolrClient(conf);
   }
 
   // For Old API
   public SolrRecordWriter(JobConf conf){
 
     log.info("SolrRecordWriter ->  SolrRecordWriter(JobConf conf)");
-    solr = SolrOperations.getSolrServer(conf);
+    solr = SolrOperations.getSolrClient(conf);
   }
 
   // New & Old API
@@ -69,7 +64,7 @@ public class SolrRecordWriter extends RecordWriter<NullWritable, Writable>
     log.info("SolrRecordWriter ->  write");
 
   	if(solr == null) {
-      solr = SolrOperations.getSolrServer(conf);
+      solr = SolrOperations.getSolrClient(conf);
   	}
 
     SolrInputDocument doc = new SolrInputDocument();

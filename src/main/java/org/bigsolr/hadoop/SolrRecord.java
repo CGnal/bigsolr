@@ -15,23 +15,21 @@
 
 package org.bigsolr.hadoop;
 
-import java.util.Collection;
-import java.util.Map;
+import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.hadoop.io.DataOutputOutputStream;
+import org.apache.hadoop.io.Writable;
+import org.apache.log4j.Logger;
+import org.apache.solr.common.SolrDocument;
+import org.apache.solr.common.util.FastOutputStream;
+import org.apache.solr.common.util.JavaBinCodec;
+import org.apache.solr.hadoop.UnbufferedDataInputInputStream;
+
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.Serializable;
-import java.io.ObjectInputStream;
-
-import org.apache.hadoop.io.Writable;
-import org.apache.hadoop.io.DataOutputOutputStream;
-import org.apache.solr.common.SolrDocument;
-import org.apache.solr.common.util.JavaBinCodec;
-import org.apache.solr.common.util.FastOutputStream;
-import org.apache.solr.hadoop.UnbufferedDataInputInputStream;
-import org.apache.commons.lang.StringEscapeUtils;
-
-import org.apache.log4j.Logger;
+import java.util.Collection;
+import java.util.Map;
 
 public class SolrRecord implements Writable, Serializable {
 

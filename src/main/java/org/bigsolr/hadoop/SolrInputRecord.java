@@ -15,15 +15,13 @@
 
 package org.bigsolr.hadoop;
 
+import org.apache.hadoop.io.Writable;
+import org.apache.log4j.Logger;
+import org.apache.solr.common.SolrInputDocument;
+
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
-
-import org.apache.hadoop.io.Writable;
-
-import org.apache.solr.common.SolrInputDocument;
-
-import org.apache.log4j.Logger;
 
 public class SolrInputRecord extends SolrInputDocument implements Writable {
 

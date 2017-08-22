@@ -17,9 +17,9 @@ package org.bigsolr.hadoop;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.log4j.Logger;
-import org.apache.solr.client.solrj.SolrServer;
-import org.apache.solr.client.solrj.impl.CloudSolrServer;
-import org.apache.solr.client.solrj.impl.HttpSolrServer;
+import org.apache.solr.client.solrj.SolrClient;
+import org.apache.solr.client.solrj.impl.CloudSolrClient;
+import org.apache.solr.client.solrj.impl.HttpSolrClient;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,16 +32,16 @@ public class SolrOperations {
     private static final String SERVER_MODE = "solr.server.mode";
     private static final String COLLECTION_NAME = "solr.server.collection";
 
-    private static Map<String, SolrServer> solrServers = new HashMap<String, SolrServer>();
-    private static final Map<String, CloudSolrServer> cachedServers = new HashMap<String, CloudSolrServer>();
+    private static Map<String, SolrClient> solrClients = new HashMap<String, SolrClient>();
+    private static final Map<String, CloudSolrClient> cachedClients = new HashMap<String, CloudSolrClient>();
 
-    public static SolrServer getSolrServer(Configuration conf) {
-        SolrServer solr = null;
+    public static SolrClient getSolrClient(Configuration conf) {
+        SolrClient solr = null;
         if (conf.get(SERVER_MODE).toLowerCase().equals("standalone")) {
             String ENDPOINT = "http://" + conf.get(SERVER_URL) + "/solr/" + conf.get(COLLECTION_NAME);
-            solr = getSolrHttpServer(ENDPOINT);
+            solr = getSolrHttpClient(ENDPOINT);
         } else if (conf.get(SERVER_MODE).toLowerCase().equals("cloud")) {
-            solr = getSolrCloudServer(conf.get(SERVER_URL), conf.get(COLLECTION_NAME));
+            solr = getSolrCloudClient(conf.get(SERVER_URL), conf.get(COLLECTION_NAME));
         } else {
             log.error("This SERVER_MODE is not supported: " + conf.get(SERVER_MODE));
             System.exit(0);
@@ -49,23 +49,23 @@ public class SolrOperations {
         return solr;
     }
 
-    protected static HttpSolrServer getSolrHttpServer(String httpServerUrl) {
+    protected static HttpSolrClient getSolrHttpClient(String httpServerUrl) {
         // Better add authentication
-        return new HttpSolrServer(httpServerUrl);
+        return new HttpSolrClient(httpServerUrl);
     }
 
-    protected static CloudSolrServer getSolrCloudServer(String zkHostUrl, String collection) {
-        CloudSolrServer cloudSolrServer = null;
-        synchronized (cachedServers) {
-            cloudSolrServer = cachedServers.get(zkHostUrl);
-            if (cloudSolrServer == null) {
-                cloudSolrServer = new CloudSolrServer(zkHostUrl + "/solr");
-                cloudSolrServer.setDefaultCollection(collection);
-                cloudSolrServer.connect();
-                cachedServers.put(zkHostUrl, cloudSolrServer);
+    protected static CloudSolrClient getSolrCloudClient(String zkHostUrl, String collection) {
+        CloudSolrClient cloudSolrClient = null;
+        synchronized (cachedClients) {
+            cloudSolrClient = cachedClients.get(zkHostUrl);
+            if (cloudSolrClient == null) {
+                cloudSolrClient = new CloudSolrClient(zkHostUrl + "/solr");
+                cloudSolrClient.setDefaultCollection(collection);
+                cloudSolrClient.connect();
+                cachedClients.put(zkHostUrl, cloudSolrClient);
             }
         }
-        return cloudSolrServer;
+        return cloudSolrClient;
     }
 
 }

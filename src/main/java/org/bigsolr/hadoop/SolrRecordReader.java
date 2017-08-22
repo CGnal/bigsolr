@@ -15,19 +15,15 @@
 
 package org.bigsolr.hadoop;
 
-import java.io.IOException;
-
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.mapreduce.InputSplit;
 import org.apache.hadoop.mapreduce.RecordReader;
 import org.apache.hadoop.mapreduce.TaskAttemptContext;
-
+import org.apache.log4j.Logger;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 
-import org.bigsolr.hadoop.SolrRecord;
-
-import org.apache.log4j.Logger;
+import java.io.IOException;
 
 public class SolrRecordReader extends RecordReader<NullWritable, SolrRecord> 
     implements org.apache.hadoop.mapred.RecordReader<NullWritable, SolrRecord>{

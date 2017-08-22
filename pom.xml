@@ -6,30 +6,43 @@
     <groupId>org.bigsolr</groupId>
     <artifactId>bigsolr</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.1-cdh5.7.0</version>
+    <version>1.0.1-hdp2.6.0</version>
     <name>BigSolr</name>
     <url>http://maven.apache.org</url>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <java.version>1.8</java.version>
-        <scala.version>2.10.6</scala.version>
-        <hadoop.version>2.6.0-cdh5.7.0</hadoop.version>
-        <spark.version>1.6.0-cdh5.7.0</spark.version>
-        <solr.version>4.10.3-cdh5.7.0</solr.version>
+        <java-version>1.8</java-version>
+        <scala-version>2.11.11</scala-version>
+        <hdp-version>2.6.0.3-8</hdp-version>
+        <hadoop-version>2.7.3.${hdp-version}</hadoop-version>
+        <spark-version>2.1.0.${hdp-version}</spark-version>
+        <solr-version>5.5.1</solr-version>
+        <spark-streaming-twitter-version>2.1.1</spark-streaming-twitter-version>
+
+        <!-- plugin versions -->
+        <maven-java-compiler-version>3.6.1</maven-java-compiler-version>
+        <scala-maven-plugin-version>3.2.2</scala-maven-plugin-version>
+
     </properties>
 
     <repositories>
         <repository>
-            <id>cloudera</id>
-            <url>https://repository.cloudera.com/artifactory/cloudera-repos/</url>
+            <id>hortonworks releases public</id>
+            <url>http://repo.hortonworks.com/content/repositories/releases/</url>
+        </repository>
+
+        <repository>
+            <id>hortonworks groups public</id>
+            <url>http://repo.hortonworks.com/content/groups/public/</url>
         </repository>
     </repositories>
 
     <build>
         <plugins>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.0</version>
+                <version>${maven-java-compiler-version}</version>
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
@@ -125,7 +138,7 @@
             <plugin>
                 <groupId>net.alchim31.maven</groupId>
                 <artifactId>scala-maven-plugin</artifactId>
-                <version>3.2.0</version>
+                <version>${scala-maven-plugin-version}</version>
                 <executions>
                     <execution>
                         <id>compile</id>
@@ -143,7 +156,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <scalaVersion>${scala.version}</scalaVersion>
+                    <scalaVersion>${scala-version}</scalaVersion>
                     <recompileMode>incremental</recompileMode>
                     <useZincServer>true</useZincServer>
                     <args>
@@ -159,9 +172,9 @@
                     </jvmArgs>
                     <javacArgs>
                         <javacArg>-source</javacArg>
-                        <javacArg>${java.version}</javacArg>
+                        <javacArg>${java-version}</javacArg>
                         <javacArg>-target</javacArg>
-                        <javacArg>${java.version}</javacArg>
+                        <javacArg>${java-version}</javacArg>
                     </javacArgs>
                 </configuration>
             </plugin>
@@ -171,7 +184,7 @@
         <dependency>
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-library</artifactId>
-            <version>${scala.version}</version>
+            <version>${scala-version}</version>
         </dependency>
 
         <dependency>
@@ -190,21 +203,21 @@
 
         <dependency>
             <groupId>org.apache.spark</groupId>
-            <artifactId>spark-sql_2.10</artifactId>
-            <version>${spark.version}</version>
+            <artifactId>spark-sql_2.11</artifactId>
+            <version>${spark-version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.spark</groupId>
-            <artifactId>spark-streaming_2.10</artifactId>
-            <version>${spark.version}</version>
+            <artifactId>spark-streaming_2.11</artifactId>
+            <version>${spark-version}</version>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
-            <groupId>org.apache.spark</groupId>
-            <artifactId>spark-streaming-twitter_2.10</artifactId>
-            <version>${spark.version}</version>
+            <groupId>org.apache.bahir</groupId>
+            <artifactId>spark-streaming-twitter_2.11</artifactId>
+            <version>${spark-streaming-twitter-version}</version>
         </dependency>
 
         <dependency>
@@ -216,7 +229,7 @@
         <dependency>
             <groupId>org.apache.solr</groupId>
             <artifactId>solr-solrj</artifactId>
-            <version>${solr.version}</version>
+            <version>${solr-version}</version>
             <type>jar</type>
         </dependency>
 
@@ -235,7 +248,7 @@
         <dependency>
             <groupId>org.apache.hadoop</groupId>
             <artifactId>hadoop-client</artifactId>
-            <version>${hadoop.version}</version>
+            <version>${hadoop-version}</version>
             <scope>compile</scope>
         </dependency>
 

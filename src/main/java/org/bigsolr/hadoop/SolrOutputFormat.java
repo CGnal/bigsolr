@@ -15,18 +15,16 @@
 
 package org.bigsolr.hadoop;
 
-import java.io.IOException;
-
-import org.apache.hadoop.mapreduce.OutputFormat;
-import org.apache.hadoop.mapreduce.JobContext;
-import org.apache.hadoop.mapreduce.TaskAttemptContext;
-import org.apache.hadoop.mapreduce.OutputCommitter;
-
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.mapred.JobConf;
+import org.apache.hadoop.mapreduce.JobContext;
+import org.apache.hadoop.mapreduce.OutputCommitter;
+import org.apache.hadoop.mapreduce.OutputFormat;
+import org.apache.hadoop.mapreduce.TaskAttemptContext;
 import org.apache.hadoop.util.Progressable;
-
 import org.apache.log4j.Logger;
+
+import java.io.IOException;
 
 public class SolrOutputFormat extends OutputFormat 
   implements org.apache.hadoop.mapred.OutputFormat {

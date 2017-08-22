@@ -15,29 +15,19 @@
 
 package org.bigsolr.hadoop;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.io.NullWritable;
-import org.apache.hadoop.mapreduce.InputFormat;
-import org.apache.hadoop.mapreduce.InputSplit;
-import org.apache.hadoop.mapreduce.JobContext;
-import org.apache.hadoop.mapreduce.TaskAttemptContext;
-import org.apache.hadoop.mapreduce.RecordReader;
-
-import org.apache.solr.client.solrj.SolrServer;
-import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.common.SolrDocumentList;
-import org.apache.solr.client.solrj.response.QueryResponse;
-
-import org.bigsolr.hadoop.SolrOperations;
-
+import org.apache.hadoop.mapreduce.*;
 import org.apache.log4j.Logger;
+import org.apache.solr.client.solrj.SolrClient;
+import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.SolrDocumentList;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SolrInputFormat extends InputFormat<NullWritable, SolrRecord> 
   implements org.apache.hadoop.mapred.InputFormat<NullWritable, SolrRecord> {
@@ -56,7 +46,7 @@ public class SolrInputFormat extends InputFormat<NullWritable, SolrRecord>
 
     Configuration conf = context.getConfiguration();
     int numSplits = context.getNumReduceTasks();
-    SolrServer solr = SolrOperations.getSolrServer(conf);
+    SolrClient solr = SolrOperations.getSolrClient(conf);
 
     final SolrQuery solrQuery = new SolrQuery(conf.get(SOLR_QUERY));
     solrQuery.setRows(50);
@@ -88,7 +78,7 @@ public class SolrInputFormat extends InputFormat<NullWritable, SolrRecord>
   public org.apache.hadoop.mapred.InputSplit[] getSplits(org.apache.hadoop.mapred.JobConf conf, int numSplits) throws IOException {
     log.info("SolrInputFormat -> getSplits");
     String collectionName = conf.get(COLLECTION_NAME);
-    SolrServer solr = SolrOperations.getSolrServer(conf);
+    SolrClient solr = SolrOperations.getSolrClient(conf);
 
     final SolrQuery solrQuery = new SolrQuery(conf.get(SOLR_QUERY));
     solrQuery.setRows(50);
@@ -126,7 +116,7 @@ public class SolrInputFormat extends InputFormat<NullWritable, SolrRecord>
     Configuration conf = context.getConfiguration();
     org.apache.hadoop.mapred.Reporter reporter = null;  // Need to implement with heartbeat
     
-    SolrServer solr = SolrOperations.getSolrServer(conf);
+    SolrClient solr = SolrOperations.getSolrClient(conf);
 
     SolrInputSplit solrSplit = (SolrInputSplit) split;
     final int numDocs = (int) solrSplit.getLength();
@@ -154,7 +144,7 @@ public class SolrInputFormat extends InputFormat<NullWritable, SolrRecord>
 
     log.info("SolrInputFormat -> getRecordReader");
 
-    SolrServer solr = SolrOperations.getSolrServer(conf);
+    SolrClient solr = SolrOperations.getSolrClient(conf);
     int numDocs = 0;
 
     SolrInputSplit solrSplit = (SolrInputSplit) split;
