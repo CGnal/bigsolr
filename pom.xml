@@ -37,6 +37,17 @@
         </repository>
     </repositories>
 
+    <distributionManagement>
+        <snapshotRepository>
+            <id>eligotech-nexus-snapshot</id>
+            <url>http://repo.eligotech.com/nexus/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>eligotech-nexus-release</id>
+            <url>http://repo.eligotech.com/nexus/content/repositories/releases</url>
+        </repository>
+    </distributionManagement>
+
     <build>
         <plugins>
             <plugin>
@@ -236,7 +247,7 @@
         <dependency>
             <groupId>org.apache.solr</groupId>
             <artifactId>solr-map-reduce</artifactId>
-            <version>4.10.3</version>
+            <version>${solr-version}</version>
         </dependency>
 
         <dependency>
